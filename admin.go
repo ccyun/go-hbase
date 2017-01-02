@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/juju/errors"
-	"github.com/ngaut/log"
+	"github.com/astaxie/beego/logs"
 	"github.com/pingcap/go-hbase/proto"
 )
 
@@ -162,7 +162,7 @@ func (c *client) CreateTable(t *TableDescriptor, splits [][]byte) error {
 		if regCnt == numRegs {
 			return nil
 		}
-		log.Warnf("Retrying create table for the %d time(s)", retry+1)
+		logs.Warning("Retrying create table for the %d time(s)", retry+1)
 		time.Sleep(time.Duration(getPauseTime(retry)) * time.Millisecond)
 	}
 	return errors.New("create table timeout")

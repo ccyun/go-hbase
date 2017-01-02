@@ -3,7 +3,7 @@ package hbase
 import (
 	pb "github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
-	"github.com/ngaut/log"
+	"github.com/astaxie/beego/logs"
 	"github.com/pingcap/go-hbase/proto"
 )
 
@@ -64,7 +64,7 @@ func (c *client) innerDo(table, row []byte, action action, useCache bool) (pb.Me
 	// Try to create and send a new resuqest call.
 	cl, err := c.innerCall(table, row, action, useCache)
 	if err != nil {
-		log.Warnf("inner call failed - %v", errors.ErrorStack(err))
+		logs.Warning("inner call failed - %v", errors.ErrorStack(err))
 		return nil, errors.Trace(err)
 	}
 
@@ -93,7 +93,7 @@ LOOP:
 		}
 
 		useCache = false
-		log.Warnf("Retrying action for the %d time(s), error - %v", i+1, errors.ErrorStack(err))
+		logs.Warning("Retrying action for the %d time(s), error - %v", i+1, errors.ErrorStack(err))
 		retrySleep(i + 1)
 	}
 

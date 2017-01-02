@@ -12,7 +12,7 @@ import (
 	pb "github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
 	"github.com/ngaut/go-zookeeper/zk"
-	"github.com/ngaut/log"
+	"github.com/astaxie/beego/logs"
 	"github.com/pingcap/go-hbase/proto"
 )
 
@@ -166,7 +166,7 @@ func (c *client) init() error {
 		return errors.Trace(err)
 	}
 
-	log.Debug("connect root region server...", c.rootServerName)
+	logs.Debug("connect root region server...", c.rootServerName)
 	serverAddr := serverNameToAddr(c.rootServerName)
 	conn, err := newConnection(serverAddr, ClientService)
 	if err != nil {
@@ -411,7 +411,7 @@ func (c *client) LocateRegion(table, row []byte, useCache bool) (*RegionInfo, er
 	case *exception:
 		return nil, errors.New(r.msg)
 	default:
-		log.Warnf("Unknown response - %T - %v", r, r)
+		logs.Warning("Unknown response - %T - %v", r, r)
 	}
 
 	return nil, errors.Errorf("Couldn't find the region: [table=%s] [row=%q] [region_row=%q]", table, row, regionRow)

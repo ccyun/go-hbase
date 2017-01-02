@@ -5,7 +5,7 @@ import (
 
 	pb "github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
-	"github.com/ngaut/log"
+	"github.com/astaxie/beego/logs"
 	"github.com/pingcap/go-hbase/proto"
 )
 
@@ -235,7 +235,7 @@ func (s *Scan) getData(startKey []byte, retries int) ([]*ResultRow, error) {
 			}
 			s.server = nil
 			s.location = nil
-			log.Warnf("Retryint get data for %d time(s)", retries+1)
+			logs.Warning("Retryint get data for %d time(s)", retries+1)
 			retrySleep(retries + 1)
 			return s.getData(startKey, retries+1)
 		}
@@ -315,18 +315,18 @@ func (s *Scan) nextBatch() int {
 	}
 
 	// Notice: ignore error here.
-	// TODO: add error check, now only add a log.
+	// TODO: add error check, now only add a logs.
 	rs, err := s.getData(startKey, 0)
 	if err != nil {
-		log.Errorf("scan next batch failed - [startKey=%q], %v", startKey, errors.ErrorStack(err))
+		logs.Error("scan next batch failed - [startKey=%q], %v", startKey, errors.ErrorStack(err))
 	}
 
 	// Current region get 0 data, try switch to next region.
 	if len(rs) == 0 && len(s.nextStartKey) > 0 {
-		// TODO: add error check, now only add a log.
+		// TODO: add error check, now only add a logs.
 		rs, err = s.getData(s.nextStartKey, 0)
 		if err != nil {
-			log.Errorf("scan next batch failed - [startKey=%q], %v", s.nextStartKey, errors.ErrorStack(err))
+			logs.Error("scan next batch failed - [startKey=%q], %v", s.nextStartKey, errors.ErrorStack(err))
 		}
 	}
 

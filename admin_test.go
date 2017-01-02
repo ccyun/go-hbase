@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ngaut/log"
+	"github.com/astaxie/beego/logs"
 	. "github.com/pingcap/check"
 )
 
@@ -24,7 +24,7 @@ var (
 func getTestZkHosts() []string {
 	zks := strings.Split(*testZks, ",")
 	if len(zks) == 0 {
-		log.Fatal("invalid zk path")
+		logs.Error("invalid zk path")
 	}
 	return zks
 }

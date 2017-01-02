@@ -10,7 +10,7 @@ import (
 
 	pb "github.com/golang/protobuf/proto"
 	"github.com/juju/errors"
-	"github.com/ngaut/log"
+	"github.com/astaxie/beego/logs"
 	"github.com/pingcap/go-hbase/iohelper"
 	"github.com/pingcap/go-hbase/proto"
 )
@@ -87,7 +87,7 @@ func processMessage(msg []byte) ([][]byte, error) {
 				break
 			}
 
-			log.Errorf("Decode raw bytes error - %v", errors.ErrorStack(err))
+			logs.Error("Decode raw bytes error - %v", errors.ErrorStack(err))
 			return nil, errors.Trace(err)
 		}
 
@@ -162,7 +162,7 @@ func (c *connection) init() error {
 	go func() {
 		err := c.processMessages()
 		if err != nil {
-			log.Warnf("process messages failed - %v", errors.ErrorStack(err))
+			logs.Warning("process messages failed - %v", errors.ErrorStack(err))
 			return
 		}
 	}()
